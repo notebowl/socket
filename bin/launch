@@ -2,4 +2,4 @@
 
 cd $LAUNCHABLE_ROOT
 
-./node/bin/node server.js
+exec ./node/bin/node server.js
