@@ -23,7 +23,12 @@ app.get('/', function(req, res) {
 app.get('/_status', function(req, res){
   // TODO enable / disable
   res.set('Content-Type', 'text/plain');
-  res.send('OK');
+  if (fs.existsSync(path.join(process.env.TMPDIR, "down.txt"))) {
+    res.status(503);
+    res.send('DOWN');
+  } else {
+    res.send('OK');
+  }
 });
 
 io.on('connection', function (socket) {

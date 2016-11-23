@@ -1,0 +1,4 @@
+#!/bin/bash -ex
+
+rm -f $TMPDIR/down.txt
+sleep 10
