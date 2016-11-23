@@ -15,8 +15,12 @@ if (!process.env.CONFIG_FILE) {
 
 var config = YAML.load(process.env.CONFIG_FILE);
 
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
   res.send('NoteBowl Push');
+});
+
+app.get('/_status', function(req, res){
+  res.send('OK');
 });
 
 io.on('connection', function (socket) {
