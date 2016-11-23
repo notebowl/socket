@@ -1,5 +1,7 @@
 var express = require('express');
+var fs      = require('fs');
 var http    = require('http');
+var path    = require('path');
 var socket  = require('socket.io');
 var Redis   = require('ioredis');
 var YAML    = require('yamljs');
