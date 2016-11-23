@@ -8,18 +8,19 @@ var app    = express();
 var server = http.createServer(app)
 var io     = socket(server);
 
-if (!process.env.CONFIG_FILE) {
-  console.error("Missing CONFIG_FILE env variable");
+if (!process.env.CONFIG_PATH) {
+  console.error("Missing CONFIG_PATH env variable");
   process.exit(1);
 }
 
-var config = YAML.load(process.env.CONFIG_FILE);
+var config = YAML.load(process.env.CONFIG_PATH);
 
 app.get('/', function(req, res) {
   res.send('NoteBowl Push');
 });
 
 app.get('/_status', function(req, res){
+  // TODO enable / disable
   res.send('OK');
 });
 
