@@ -17,4 +17,5 @@ mkdir -p artifacts/socket
 tar -cvzf artifacts/socket/socket_${SHA}.tar.gz \
   bin/launch \
   node \
-  node_modules
+  node_modules \
+  server.js
