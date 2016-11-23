@@ -1,0 +1,20 @@
+#!/bin/bash -ex
+
+SHA=$(git rev-parse HEAD)
+
+NODE_VERSION=6.9.1
+
+export PATH=$(pwd)/node/bin:$PATH
+
+# Download node
+gsutil cp gs://notebowl-build/node/node-v${NODE_VERSION}-linux-x64.tar.xz - | tar -xJf -
+mv node-v${NODE_VERSION}-linux-x64 node
+
+# Download and install deps
+npm install
+
+mkdir -p artifacts/socket
+tar -cvzf artifacts/socket/socket_${SHA}.tar.gz \
+  bin/launch \
+  node \
+  node_modules
