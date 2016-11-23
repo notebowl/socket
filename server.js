@@ -16,11 +16,13 @@ if (!process.env.CONFIG_PATH) {
 var config = YAML.load(process.env.CONFIG_PATH);
 
 app.get('/', function(req, res) {
+  res.set('Content-Type', 'text/plain');
   res.send('NoteBowl Push');
 });
 
 app.get('/_status', function(req, res){
   // TODO enable / disable
+  res.set('Content-Type', 'text/plain');
   res.send('OK');
 });
 
