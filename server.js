@@ -9,13 +9,17 @@ var YAML    = require('yamljs');
 var app    = express();
 var server = http.createServer(app)
 var io     = socket(server);
+var config = {};
 
-if (!process.env.CONFIG_PATH) {
-  console.error("Missing CONFIG_PATH env variable");
-  process.exit(1);
+if (process.env.CONFIG_PATH) {
+  config = YAML.load(process.env.CONFIG_PATH);
 }
 
-var config = YAML.load(process.env.CONFIG_PATH);
+var port = process.env.PORT || config.port || 3000;
+var redis = config.redis || {
+    'port': 6379,
+    'host': 'localhost',
+};
 
 app.get('/', function(req, res) {
   res.set('Content-Type', 'text/plain');
@@ -34,10 +38,10 @@ app.get('/_status', function(req, res){
 });
 
 io.on('connection', function (socket) {
-  if (config.redis.sentinel) {
+  if (redis.sentinel) {
     var client = new Redis({
-      name: config.redis.cluster,
-      sentinels: config.redis.sentinel.map(function (addr) {
+      name: redis.cluster,
+      sentinels: redis.sentinel.map(function (addr) {
         return {
           host: addr.split(":")[0],
           port: parseInt(addr.split(":")[1], 10),
@@ -45,7 +49,7 @@ io.on('connection', function (socket) {
       })
     });
   } else {
-    var client = new Redis(config.redis.port, config.redis.host);
+    var client = new Redis(redis.port, redis.host);
   }
 
   socket.on('register', function (data, fn) {
@@ -63,5 +67,6 @@ io.on('connection', function (socket) {
 });
 
 // Finally, listen on the port
-console.log("Listening on port " + config.port + "...");
-server.listen(config.port);
+console.log("Listening on port " + port + "...");
+console.log("Polling from redis server " + redis.host + ':' + redis.port + "...");
+server.listen(port);
