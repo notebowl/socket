@@ -18,7 +18,7 @@ if (process.env.CONFIG_PATH) {
 var port = process.env.PORT || config.port || 3000;
 var redis = config.redis || {
     'port': 6379,
-    'host': 'localhost',
+    'host': 'redis',
 };
 
 app.get('/', function(req, res) {
