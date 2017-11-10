@@ -49,7 +49,11 @@ io.on('connection', function (socket) {
       })
     });
   } else {
-    var client = new Redis(redis.port, redis.host);
+      if(process.env.NOTEBOWL_API_PATH) {
+          var client = new Redis();
+      } else {
+          var client = new Redis(redis.port, redis.host);
+      }
   }
 
   socket.on('register', function (data, fn) {
