@@ -1,6 +1,7 @@
 {
   "name": "notebowl-socket-server",
   "version": "1.0.0",
+  "license" : "MIT",
   "start": "node server.js",
   "dependencies": {
     "express": "4.11.2",
