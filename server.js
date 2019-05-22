@@ -4,31 +4,27 @@ var http = require('http');
 var path = require('path');
 var socket = require('socket.io');
 var Redis = require('ioredis');
-var YAML = require('yamljs');
 
 var app = express();
 var server = http.createServer(app)
 var io = socket(server);
-var config = {};
-
-if (process.env.CONFIG_PATH) {
-    config = YAML.load(process.env.CONFIG_PATH);
-}
-
-var port = process.env.PORT || config.port || 3000;
-var redis = config.redis || {
-    'port': 6379,
-    'host': 'redis',
+var config = {
+    host: process.env.HOST,
+    password: process.env.PASSWORD,
+    port: 6379,
 };
+
+var port = process.env.PORT || 3000;
 
 app.get('/', function(req, res) {
     res.set('Content-Type', 'text/plain');
-    res.send('NoteBowl Push');
+    res.send('Notebowl Push');
 });
 
 app.get('/_status', function(req, res) {
     // TODO enable / disable
     res.set('Content-Type', 'text/plain');
+
     if (fs.existsSync(path.join(process.env.TMPDIR, "down.txt"))) {
         res.status(503);
         res.send('DOWN');
@@ -38,23 +34,7 @@ app.get('/_status', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-    if (redis.sentinel) {
-        var client = new Redis({
-            name: redis.cluster,
-            sentinels: redis.sentinel.map(function(addr) {
-                return {
-                    host: addr.split(":")[0],
-                    port: parseInt(addr.split(":")[1], 10),
-                };
-            })
-        });
-    } else {
-        if (process.env.NOTEBOWL_API_PATH) {
-            var client = new Redis();
-        } else {
-            var client = new Redis(redis.port, redis.host);
-        }
-    }
+    var client = new Redis({port: config.port, host: config.host, password: config.password});
 
     socket.on('register', function(data, fn) {
         client.subscribe(data);
@@ -72,5 +52,6 @@ io.on('connection', function(socket) {
 
 // Finally, listen on the port
 console.log("Listening on port " + port + "...");
-console.log("Polling from redis server " + redis.host + ':' + redis.port + "...");
+console.log("Polling from redis server " + config.host + ':' + config.port + "...");
+
 server.listen(port);
