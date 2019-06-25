@@ -46,6 +46,10 @@ io.on('connection', function(socket) {
     });
 
     client.on('message', function(channel, message) {
+        if(!config.password) {
+            console.log(channel, message);
+        }
+
         socket.emit(channel, message);
     });
 });
