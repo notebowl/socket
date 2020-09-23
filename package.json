@@ -1,8 +1,8 @@
 {
   "name": "notebowl-socket-server",
   "version": "1.0.0",
-  "license" : "MIT",
-  "start": "node server.js",
+  "license": "MIT",
+  "start": "yarn install && node server.js",
   "dependencies": {
     "eslint-plugin-angular": "2.4.2",
     "eslint": "5.9.0",
