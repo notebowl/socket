@@ -5,9 +5,9 @@
   "start": "yarn install && node server.js",
   "dependencies": {
     "eslint-plugin-angular": "2.4.2",
-    "eslint": "5.9.0",
+    "eslint": "6.1.0",
     "express": "4.11.2",
-    "ioredis": "2.4.0",
+    "ioredis": "4.11.2",
     "socket.io": "2.2.0"
   }
 }
